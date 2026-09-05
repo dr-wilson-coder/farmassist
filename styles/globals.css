@@ -616,7 +616,7 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 /* ─── LEFT: photo panel ─── */
 .login-photo-panel {
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh;A
   background:
     linear-gradient(180deg, rgba(22,52,42,0.15) 0%, rgba(22,52,42,0.35) 55%, rgba(13,31,24,0.92) 100%),
     linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%),
@@ -985,22 +985,7 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 /* ─── Responsive: stack on smaller screens ─── */
 @media (max-width: 980px) {
   .login-split { grid-template-columns: 1fr; }
-  .login-photo-panel {
-        position: relative;
-        min-height: 100vh;
-        background-color: var(--forest);
-        background-image:
-          linear-gradient(180deg, rgba(22,52,42,0.15) 0%, rgba(22,52,42,0.35) 55%, rgba(13,31,24,0.92) 100%),
-                url('/images/hero-farmer.jpg');
-        background-size: cover, cover;
-        background-position: center, center;
-        background-repeat: no-repeat, no-repeat;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 26px 40px 44px;
-         color: var(--white);
-        }
+  
   .login-hero-copy h2 { font-size: 30px; }
   .login-nav-links { display: none; }
   .login-footer { flex-direction: column; align-items: flex-start; padding: 20px 24px; }
