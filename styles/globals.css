@@ -607,26 +607,6 @@ button:focus-visible, input:focus-visible, select:focus-visible {
    this only adds new classes for the new login page layout).
    ═══════════════════════════════════════════════════════════════════════ */
 
-.login-split {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 56% 44%;
-}
-
-/* ─── LEFT: photo panel ─── */
-.login-photo-panel {
-  position: relative;
-  min-height: 100vh;A
-  background:
-    linear-gradient(180deg, rgba(22,52,42,0.15) 0%, rgba(22,52,42,0.35) 55%, rgba(13,31,24,0.92) 100%),
-    linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%),
-    url('/images/hero-farmer.jpg') center/cover no-repeat;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 26px 40px 44px;
-  color: var(--white);
-}
 
 .login-nav {
   display: flex;
@@ -995,4 +975,923 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   .login-card { padding: 26px 22px; }
   .feature-badges { grid-template-columns: 1fr; }
   .login-stats { gap: 20px; }
+}
+/* Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░
+   ADD-ON: Photo upload styles
+   Paste this at the END of your styles/globals.css
+   Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░Б∙░ */
+
+.hero-photo-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(22,52,42,0.08);
+  color: var(--forest);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 4px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.hero-photo-btn:hover:not(:disabled) { background: rgba(22,52,42,0.14); transform: scale(1.05); }
+.hero-photo-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.image-preview-strip {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+  animation: riseIn 0.3s var(--ease) both;
+}
+
+.image-preview-strip img {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.5);
+  display: block;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--clay);
+  color: var(--white);
+  border: 2px solid var(--white);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+.remove-image-btn:hover { transform: scale(1.1); }
+
+.bubble-image {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.login-photo-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+@keyframes kenBurns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.09) translate(-1%, -1%); }
+}
+
+.login-photo-panel > * {
+  position: relative;
+  z-index: 1;
+}
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON v6: Framed login page + Ken Burns + micro-interactions
+   
+   This REPLACES your previous login-split CSS block entirely.
+   Find `.login-split {` in your globals.css and DELETE everything from
+   there down to the matching closing brace of `.login-footer { ... }`
+   and its @media rules for login — then paste this whole block in
+   its place. (Everything else in globals.css stays untouched.)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.login-outer {
+  min-height: 100vh;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(16px, 4vw, 48px) clamp(16px, 5vw, 64px) 0;
+}
+
+.login-split {
+  width: 100%;
+  max-width: 1560px;
+  min-height: 82vh;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  grid-template-columns: 56% 44%;
+  animation: frameIn 0.7s var(--ease) both;
+}
+
+@keyframes frameIn {
+  from { opacity: 0; transform: scale(0.98) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ─── LEFT: photo panel with Ken Burns ─── */
+.login-photo-panel {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 26px 40px 44px;
+  color: var(--white);
+}
+
+.login-photo-panel .kb-bg {
+  position: absolute;
+  inset: -20px; /* overscan so the zoom never reveals an edge */
+  background-color: var(--forest);
+  background-image:
+    linear-gradient(180deg, rgba(22,52,42,0.15) 0%, rgba(22,52,42,0.35) 55%, rgba(13,31,24,0.92) 100%),
+    url('/images/hero-farmer.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: kenBurns 22s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.09) translate(-1%, -1%); }
+}
+
+.login-photo-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Nav ─── */
+.login-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.1s;
+}
+
+.login-nav .nav-brand .name { color: var(--white); }
+
+.login-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex: 1;
+  font-size: 14.5px;
+}
+
+.login-nav-links a {
+  position: relative;
+  color: rgba(255,255,255,0.88);
+  text-decoration: none;
+  cursor: default;
+  padding-bottom: 3px;
+}
+
+.login-nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--gold-light);
+  transition: width 0.25s var(--ease);
+}
+
+.login-nav-links a:hover::after { width: 100%; }
+
+.login-lang-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.15s ease;
+}
+.login-lang-pill:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+
+/* ─── Hero copy ─── */
+.login-hero-copy { max-width: 560px; }
+
+.login-hero-copy h2 {
+  color: var(--white);
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  animation: riseIn 0.6s var(--ease) both;
+}
+
+.login-hero-copy h2:nth-of-type(1) { animation-delay: 0.2s; }
+.login-hero-copy h2:nth-of-type(2) { animation-delay: 0.3s; }
+.login-hero-copy h2 .accent { color: var(--gold-light); }
+
+.login-hero-copy .desc {
+  color: rgba(255,255,255,0.85);
+  font-size: 15.5px;
+  margin: 16px 0 24px;
+  max-width: 440px;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.4s;
+}
+
+.login-stats {
+  display: flex;
+  gap: 34px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  flex-wrap: wrap;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.5s;
+}
+
+.login-stat { display: flex; align-items: center; gap: 9px; }
+.login-stat .stat-icon { font-size: 18px; }
+.login-stat .stat-num { font-weight: 700; font-size: 15.5px; color: var(--white); display: block; }
+.login-stat .stat-label { font-size: 12.5px; color: rgba(255,255,255,0.7); }
+
+.login-badge-strip {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  width: fit-content;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.6s;
+  transition: background 0.18s ease;
+}
+.login-badge-strip:hover { background: rgba(255,255,255,0.16); }
+
+/* ─── RIGHT: form panel ─── */
+.login-form-panel {
+  background: var(--paper-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 36px;
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  padding: 38px 36px;
+  width: 100%;
+  max-width: 400px;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.35s;
+  transition: box-shadow 0.3s ease;
+}
+.login-card:hover { box-shadow: var(--shadow-lg); }
+
+.login-card-brand { text-align: center; margin-bottom: 22px; }
+.login-card-brand .mark { font-size: 30px; display: block; margin-bottom: 6px; }
+.login-card-brand h1 { font-size: 20px; }
+
+.login-headline { text-align: center; font-size: 22px; margin-bottom: 6px; }
+.login-headline .accent { color: var(--forest); }
+
+.login-subtext {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--cocoa);
+  opacity: 0.65;
+  margin-bottom: 26px;
+}
+
+.icon-field { position: relative; margin-bottom: 16px; }
+.icon-field label { display: block; font-size: 13px; font-weight: 600; color: var(--forest); margin-bottom: 6px; }
+.icon-field .icon-wrap { position: relative; display: flex; align-items: center; }
+.icon-field svg { position: absolute; left: 13px; width: 16px; height: 16px; color: var(--cocoa); opacity: 0.45; pointer-events: none; }
+.icon-field input {
+  width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid var(--line); border-radius: 8px;
+  font-size: 15px; font-family: inherit; background: var(--white);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.icon-field input:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 4px var(--forest-glow); }
+.icon-field .toggle-eye { position: absolute; right: 12px; left: auto; background: none; border: none; cursor: pointer; opacity: 0.5; pointer-events: auto; transition: opacity 0.15s ease; }
+.icon-field .toggle-eye:hover { opacity: 0.9; }
+
+.login-row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 13.5px; }
+.remember-me { display: flex; align-items: center; gap: 7px; color: var(--cocoa); cursor: pointer; }
+.remember-me input { accent-color: var(--forest); width: 15px; height: 15px; }
+.forgot-link { background: none; border: none; color: var(--forest); font-weight: 600; cursor: pointer; font-size: 13.5px; }
+.forgot-link:hover { text-decoration: underline; }
+
+.btn-signin {
+  width: 100%; background: var(--forest); color: var(--white); border: none; border-radius: 8px;
+  padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 10px var(--forest-glow);
+}
+.btn-signin:hover:not(:disabled) { background: var(--forest-light); box-shadow: 0 6px 18px var(--forest-glow); transform: translateY(-1px); }
+.btn-signin:active:not(:disabled) { transform: scale(0.98); }
+.btn-signin:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+
+.login-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; font-size: 12.5px; color: var(--cocoa); opacity: 0.5; }
+.login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.btn-google {
+  width: 100%; background: var(--white); border: 1.5px solid var(--line); border-radius: 8px;
+  padding: 12px; font-size: 14.5px; font-weight: 600; color: var(--cocoa); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+.btn-google:hover { border-color: var(--forest); background: var(--paper); transform: translateY(-1px); }
+.btn-google:active { transform: scale(0.98); }
+
+.google-g {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: conic-gradient(from 0deg, #4285F4 0deg 90deg, #34A853 90deg 180deg, #FBBC05 180deg 270deg, #EA4335 270deg 360deg);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: var(--white);
+}
+
+.login-switch { text-align: center; font-size: 13.5px; color: var(--cocoa); opacity: 0.75; margin-top: 18px; }
+.login-switch button { background: none; border: none; color: var(--forest); font-weight: 700; cursor: pointer; font-size: 13.5px; }
+.login-switch button:hover { text-decoration: underline; }
+
+.feature-badges {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  max-width: 400px; width: 100%; margin-top: 18px;
+  animation: riseIn 0.6s var(--ease) both;
+  animation-delay: 0.5s;
+}
+
+.feature-badge {
+  background: var(--white); border: 1px solid var(--line-soft); border-radius: 10px; padding: 13px; font-size: 11.5px;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.feature-badge:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.feature-badge .fb-icon { font-size: 16px; margin-bottom: 6px; display: block; }
+.feature-badge .fb-title { font-weight: 700; color: var(--forest); margin-bottom: 3px; line-height: 1.3; }
+.feature-badge .fb-desc { color: var(--cocoa); opacity: 0.6; line-height: 1.3; }
+
+.error-box { background: #FBEAE7; border: 1px solid var(--error); color: var(--error); padding: 10px 13px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; animation: riseIn 0.3s var(--ease) both; }
+
+/* ─── Footer: full-width, outside the frame ─── */
+.login-footer {
+  width: 100%;
+  background: var(--forest);
+  color: rgba(255,255,255,0.75);
+  padding: 22px clamp(16px, 5vw, 64px);
+  margin-top: clamp(16px, 4vw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12.5px;
+}
+
+.login-footer .footer-brand { display: flex; align-items: center; gap: 8px; color: var(--white); font-weight: 700; font-size: 13.5px; }
+.login-footer .footer-mid { display: flex; gap: 26px; flex-wrap: wrap; }
+.login-footer .footer-links { display: flex; gap: 18px; }
+.login-footer .footer-social { display: flex; gap: 10px; }
+.login-footer .footer-social span {
+  width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center; font-size: 13px;
+  transition: transform 0.15s ease, background 0.15s ease;
+  cursor: pointer;
+}
+.login-footer .footer-social span:hover { transform: translateY(-2px); background: var(--gold); }
+
+/* ─── Responsive ─── */
+@media (max-width: 980px) {
+  .login-outer { padding: 0; }
+  .login-split { grid-template-columns: 1fr; border-radius: 0; min-height: auto; }
+  .login-photo-panel { min-height: 480px; padding: 20px 24px 32px; }
+  .login-hero-copy h2 { font-size: 30px; }
+  .login-nav-links { display: none; }
+  .login-footer { flex-direction: column; align-items: flex-start; margin-top: 0; }
+}
+
+@media (max-width: 480px) {
+  .login-card { padding: 26px 22px; }
+  .feature-badges { grid-template-columns: 1fr; }
+  .login-stats { gap: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-bg { animation: none; }
+}
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON: Dashboard polish — animations + brand consistency with login page
+   Paste this at the END of your styles/globals.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Kente stripe at the very top — ties dashboard to login page brand ─── */
+.dashboard-top-stripe {
+  height: 5px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--forest) 0px, var(--forest) 24px,
+    var(--gold) 24px, var(--gold) 40px,
+    var(--clay) 40px, var(--clay) 56px
+  );
+  background-size: 200% 100%;
+  animation: driftStripe 14s linear infinite;
+}
+
+@keyframes driftStripe {
+  from { background-position: 0% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* ─── Hero banner: subtle breathing glow instead of static ─── */
+.hero-banner {
+  animation: heroGlow 8s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%, 100% { background-position: 30% -10%, 0 0; }
+  50% { background-position: 45% -5%, 0 0; }
+}
+
+/* ─── Entrance choreography for dashboard sections ─── */
+.navbar { animation: riseIn 0.5s var(--ease) both; }
+.hero-inner > * { animation: riseIn 0.55s var(--ease) both; }
+.hero-inner .hero-greeting { animation-delay: 0.05s; }
+.hero-inner .hero-sub { animation-delay: 0.12s; }
+.hero-inner .hero-controls { animation-delay: 0.19s; }
+.hero-inner .hero-input-pill { animation-delay: 0.26s; }
+.hero-inner .hero-examples { animation-delay: 0.33s; }
+
+.quick-actions { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.15s; }
+
+.qa-card {
+  animation: riseIn 0.4s var(--ease) both;
+}
+.qa-card:nth-child(1) { animation-delay: 0.1s; }
+.qa-card:nth-child(2) { animation-delay: 0.15s; }
+.qa-card:nth-child(3) { animation-delay: 0.2s; }
+.qa-card:nth-child(4) { animation-delay: 0.25s; }
+.qa-card:nth-child(5) { animation-delay: 0.3s; }
+.qa-card:nth-child(6) { animation-delay: 0.35s; }
+
+/* Brief highlight pulse when a category is selected */
+.qa-card.active {
+  animation: activePulse 0.5s var(--ease);
+}
+@keyframes activePulse {
+  0% { box-shadow: 0 0 0 0 var(--forest-glow); }
+  60% { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: none; }
+}
+
+.pricing-grid { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.2s; }
+
+.ai-panel { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.25s; }
+
+/* ─── Livelier empty state for the AI panel ─── */
+.ai-panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 20px;
+}
+
+.ai-panel-empty .empty-icon {
+  font-size: 28px;
+  animation: gentleBounce 2.4s ease-in-out infinite;
+}
+
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.ai-panel-empty .empty-text {
+  font-size: 13.5px;
+  opacity: 0.6;
+  text-align: center;
+  max-width: 220px;
+}
+
+/* ─── Nav polish ─── */
+.nav-link.active {
+  position: relative;
+}
+
+.nav-link.soon {
+  transition: opacity 0.15s ease;
+}
+.nav-link.soon:hover { opacity: 0.7; cursor: not-allowed; }
+
+.nav-avatar {
+  transition: transform 0.2s var(--ease);
+}
+.nav-avatar:hover { transform: scale(1.08); }
+
+/* ─── Section titles get a small accent underline for polish ─── */
+.section-title {
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 36px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-top-stripe, .hero-banner, .qa-card, .ai-panel-empty .empty-icon {
+    animation: none !important;
+  }
+}
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON: Dashboard polish — animations + brand consistency with login page
+   Paste this at the END of your styles/globals.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Kente stripe at the very top — ties dashboard to login page brand ─── */
+.dashboard-top-stripe {
+  height: 5px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--forest) 0px, var(--forest) 24px,
+    var(--gold) 24px, var(--gold) 40px,
+    var(--clay) 40px, var(--clay) 56px
+  );
+  background-size: 200% 100%;
+  animation: driftStripe 14s linear infinite;
+}
+
+@keyframes driftStripe {
+  from { background-position: 0% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* ─── Hero banner: subtle breathing glow instead of static ─── */
+.hero-banner {
+  animation: heroGlow 8s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%, 100% { background-position: 30% -10%, 0 0; }
+  50% { background-position: 45% -5%, 0 0; }
+}
+
+/* ─── Entrance choreography for dashboard sections ─── */
+.navbar { animation: riseIn 0.5s var(--ease) both; }
+.hero-inner > * { animation: riseIn 0.55s var(--ease) both; }
+.hero-inner .hero-greeting { animation-delay: 0.05s; }
+.hero-inner .hero-sub { animation-delay: 0.12s; }
+.hero-inner .hero-controls { animation-delay: 0.19s; }
+.hero-inner .hero-input-pill { animation-delay: 0.26s; }
+.hero-inner .hero-examples { animation-delay: 0.33s; }
+
+.quick-actions { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.15s; }
+
+.qa-card {
+  animation: riseIn 0.4s var(--ease) both;
+}
+.qa-card:nth-child(1) { animation-delay: 0.1s; }
+.qa-card:nth-child(2) { animation-delay: 0.15s; }
+.qa-card:nth-child(3) { animation-delay: 0.2s; }
+.qa-card:nth-child(4) { animation-delay: 0.25s; }
+.qa-card:nth-child(5) { animation-delay: 0.3s; }
+.qa-card:nth-child(6) { animation-delay: 0.35s; }
+.qa-card:nth-child(7) { animation-delay: 0.4s; }
+
+/* "New to Farming" gets a gentle gold accent border to stand out as the
+   entry point for beginners, distinct from the topic-specific cards */
+.qa-card.beginner-card {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, var(--paper-white) 0%, rgba(201,154,46,0.05) 100%);
+}
+.qa-card.beginner-card .qa-icon {
+  background: var(--gold-glow);
+}
+
+/* Brief highlight pulse when a category is selected */
+.qa-card.active {
+  animation: activePulse 0.5s var(--ease);
+}
+@keyframes activePulse {
+  0% { box-shadow: 0 0 0 0 var(--forest-glow); }
+  60% { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: none; }
+}
+
+.pricing-grid { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.2s; }
+
+.ai-panel { animation: riseIn 0.5s var(--ease) both; animation-delay: 0.25s; }
+
+/* ─── Livelier empty state for the AI panel ─── */
+.ai-panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 20px;
+}
+
+.ai-panel-empty .empty-icon {
+  font-size: 28px;
+  animation: gentleBounce 2.4s ease-in-out infinite;
+}
+
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.ai-panel-empty .empty-text {
+  font-size: 13.5px;
+  opacity: 0.6;
+  text-align: center;
+  max-width: 220px;
+}
+
+/* ─── Nav polish ─── */
+.nav-link.active {
+  position: relative;
+}
+
+.nav-link.soon {
+  transition: opacity 0.15s ease;
+}
+.nav-link.soon:hover { opacity: 0.7; cursor: not-allowed; }
+
+.nav-avatar {
+  transition: transform 0.2s var(--ease);
+}
+.nav-avatar:hover { transform: scale(1.08); }
+
+/* ─── Section titles get a small accent underline for polish ─── */
+.section-title {
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 36px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-top-stripe, .hero-banner, .qa-card, .ai-panel-empty .empty-icon {
+    animation: none !important;
+  }
+}
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON: Sidebar layout + full-width conversation + profile modal
+   Paste this at the END of your styles/globals.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── New two-region layout: sidebar (left) + main content (right) ─── */
+.app-layout {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 58px); /* minus navbar height */
+}
+
+.app-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--forest);
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  position: relative;
+}
+
+.sidebar-item:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+
+.sidebar-item.active {
+  background: rgba(255,255,255,0.14);
+  color: var(--white);
+}
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--gold);
+  border-radius: 0 3px 3px 0;
+}
+
+.sidebar-item .si-icon { font-size: 17px; width: 20px; text-align: center; flex-shrink: 0; }
+
+.sidebar-item.soon { opacity: 0.5; cursor: not-allowed; }
+.sidebar-item.soon:hover { background: none; color: rgba(255,255,255,0.75); }
+.sidebar-item .si-soon {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.15);
+  padding: 2px 6px;
+  border-radius: 20px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin: 12px 4px;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* ─── Main content area ─── */
+.app-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Hero banner now lives inside app-main, full width of remaining space */
+.app-main .hero-banner { width: 100%; }
+
+.content-body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* AI panel restyled for full-width placement (was a narrow sidebar before) */
+.content-body .ai-panel {
+  position: static;
+  width: 100%;
+  margin-bottom: 36px;
+}
+
+.content-body .ai-panel-body {
+  max-height: 420px;
+}
+
+.content-body .pricing-grid {
+  margin-top: 8px;
+}
+
+/* ─── Profile modal ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,31,24,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  animation: fadeInOverlay 0.2s ease both;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.profile-modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  animation: riseIn 0.3s var(--ease) both;
+}
+
+.profile-modal h3 { font-size: 19px; margin-bottom: 20px; text-align: center; }
+
+.avatar-upload-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.avatar-preview {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 26px;
+  overflow: hidden;
+  border: 3px solid var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+
+.avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-upload-btn {
+  background: none;
+  border: 1.5px solid var(--line);
+  color: var(--forest);
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.avatar-upload-btn:hover { border-color: var(--forest); background: var(--paper); }
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.modal-actions .btn { flex: 1; }
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+.modal-close:hover { opacity: 1; }
+
+.profile-modal { position: relative; }
+
+/* ─── Nav avatar now clickable to open profile ─── */
+.nav-avatar { cursor: pointer; }
+.nav-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+/* ─── Responsive: sidebar collapses to icon-only strip, then hides ─── */
+@media (max-width: 900px) {
+  .app-sidebar { width: 76px; }
+  .sidebar-item span:not(.si-icon):not(.si-soon) { display: none; }
+  .sidebar-item { justify-content: center; }
+  .sidebar-item.active::before { left: -8px; }
+}
+
+@media (max-width: 640px) {
+  .app-layout { flex-direction: column; }
+  .app-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .sidebar-item { flex-shrink: 0; }
+  .sidebar-divider { display: none; }
+  .sidebar-bottom { margin-top: 0; }
+  .content-body { padding: 20px 16px 40px; }
 }
