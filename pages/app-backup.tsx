@@ -437,19 +437,12 @@ export default function App() {
   }
 
   return (
-    <div className="premium-dashboard">
+    <div>
       <div className="dashboard-top-stripe" />
 
-      <nav className="navbar premium-navbar">
+      <nav className="navbar">
         <div className="nav-brand"><span className="mark">🌾</span><span className="name">FarmAssist</span></div>
-        <div className="nav-search">
-          <span aria-hidden="true">⌕</span>
-          <input aria-label="Search FarmAssist" placeholder="Search crops, diseases, market prices, or ask FarmAssist…" />
-          <kbd>⌘ K</kbd>
-        </div>
-        <div className="nav-actions">
-          <button className="nav-icon-btn" aria-label="Notifications">🔔<span className="notification-dot">2</span></button>
-        </div>
+        <div style={{ flex: 1 }} />
         <div className="nav-user">
           <div className="nav-avatar" onClick={openProfileModal} title="Edit profile">
             {profile.avatar_url ? <img src={profile.avatar_url} alt="Your profile photo" /> : initials}
@@ -759,47 +752,20 @@ export default function App() {
 
             {/* Pricing — right after the conversation, as requested */}
             <h2 className="section-title">Plans</h2>
-            <div className="pricing-grid premium-pricing">
+            <div className="pricing-grid">
               {[
-                { name: 'Free', price: '₵0', suffix: '/ month', conversations: '20 AI conversations', featured: false, cta: 'Current plan', tone: 'free' },
-                { name: 'Pro', price: '₵29', suffix: '/ month', conversations: '500 AI conversations', featured: true, cta: 'Upgrade to Pro', tone: 'pro' },
-                { name: 'Enterprise', price: 'Custom', suffix: '', conversations: 'Unlimited usage', featured: false, cta: 'Talk to us', tone: 'enterprise' },
+                { name: 'Free', price: '₵0/mo', conversations: '20 / month', featured: false },
+                { name: 'Pro', price: '₵29/mo', conversations: '500 / month', featured: true },
+                { name: 'Enterprise', price: 'Custom', conversations: 'Unlimited', featured: false },
               ].map((plan) => (
-                <div key={plan.name} className={`price-card premium-price-card ${plan.featured ? 'featured' : ''}`}>
-                  {plan.featured && <div className="price-badge">MOST POPULAR</div>}
-                  <div className="price-card-top">
-                    <div>
-                      <span className="price-eyebrow">{plan.name}</span>
-                      <p className="price-amount">{plan.price}<small>{plan.suffix}</small></p>
-                    </div>
-                    <span className={`plan-icon ${plan.tone}`}>{plan.tone === 'pro' ? '✦' : plan.tone === 'enterprise' ? '⌘' : '○'}</span>
-                  </div>
+                <div key={plan.name} className={`price-card ${plan.featured ? 'featured' : ''}`}>
+                  <h3>{plan.name}</h3>
+                  <p className="price-amount">{plan.price}</p>
                   <p className="price-conversations">{plan.conversations}</p>
-                  <ul className="price-features">
-                    <li>✓ Farm advice & records</li>
-                    <li>✓ Multilingual support</li>
-                    <li>{plan.featured || plan.tone === 'enterprise' ? '✓' : '—'} Advanced insights</li>
-                  </ul>
-                  <button className={`price-cta ${plan.featured ? 'primary' : ''}`}>{plan.cta}<span>→</span></button>
+                  <button className="btn btn-outline">{plan.name === 'Free' ? 'Current plan' : 'Upgrade'}</button>
                 </div>
               ))}
             </div>
-
-            <section className="farm-intelligence-section">
-              <div className="section-kicker">FARMASSIST INTELLIGENCE</div>
-              <div className="intelligence-copy">
-                <div>
-                  <h2>From one question to a better farm decision.</h2>
-                  <p>FarmAssist brings advice, records, weather, markets and animal care into one simple workspace built for farmers.</p>
-                </div>
-                <button className="intelligence-cta">Explore FarmAssist <span>→</span></button>
-              </div>
-              <div className="intelligence-grid">
-                <article><span>01</span><h3>Ask naturally</h3><p>Type, speak or attach a crop or animal photo.</p></article>
-                <article><span>02</span><h3>Get practical guidance</h3><p>Receive clear next steps instead of technical jargon.</p></article>
-                <article><span>03</span><h3>Track the outcome</h3><p>Keep records and use them to make smarter decisions.</p></article>
-              </div>
-            </section>
           </div>
           </>
           )}

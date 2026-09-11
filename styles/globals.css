@@ -1895,3 +1895,328 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   .sidebar-bottom { margin-top: 0; }
   .content-body { padding: 20px 16px 40px; }
 }
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON: Farm Records view
+   Paste this at the END of your styles/globals.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.records-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.records-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  background: var(--paper-white);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+}
+
+.summary-card .summary-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+.summary-card .summary-num {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  color: var(--forest);
+  display: block;
+  margin-bottom: 2px;
+}
+.summary-card .summary-label { font-size: 12.5px; color: var(--cocoa); opacity: 0.65; }
+
+.record-form {
+  background: var(--paper-white);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.record-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.record-form-grid.full { grid-template-columns: 1fr; }
+
+.record-type-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.record-type-tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--cocoa);
+  transition: all 0.15s ease;
+  background: var(--white);
+}
+
+.record-type-tab.selected {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: var(--white);
+}
+
+.records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.record-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  padding: 14px 16px;
+  animation: riseIn 0.3s var(--ease) both;
+}
+
+.record-row .record-type-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.record-row .record-info { flex: 1; min-width: 0; }
+.record-row .record-name { font-weight: 600; color: var(--forest); font-size: 14.5px; }
+.record-row .record-meta { font-size: 12.5px; color: var(--cocoa); opacity: 0.6; margin-top: 2px; }
+
+.record-row .record-amount {
+  font-weight: 700;
+  color: var(--clay);
+  font-size: 14.5px;
+  flex-shrink: 0;
+}
+
+.record-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.4;
+  font-size: 15px;
+  padding: 4px;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+.record-delete-btn:hover { opacity: 1; }
+
+.records-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--cocoa);
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .records-summary { grid-template-columns: 1fr; }
+  .record-form-grid { grid-template-columns: 1fr; }
+}
+/* ═══════════════════════════════════════════════════════════════════════
+   ADD-ON: Printable Farm Report
+   Paste this at the END of your styles/globals.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.report-trigger-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.btn-report {
+  background: var(--white);
+  border: 1.5px solid var(--forest);
+  color: var(--forest);
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+}
+.btn-report:hover { background: var(--paper); }
+
+.report-modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 0;
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  animation: riseIn 0.3s var(--ease) both;
+}
+
+.report-modal-header {
+  padding: 20px 26px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-modal-header h3 { font-size: 17px; }
+
+.report-range-picker {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  padding: 16px 26px;
+  border-bottom: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+
+.report-range-picker .field { margin-bottom: 0; flex: 1; min-width: 130px; }
+
+.report-body {
+  padding: 22px 26px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.report-section {
+  margin-bottom: 24px;
+}
+
+.report-section h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--forest);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--gold);
+  display: inline-block;
+}
+
+.report-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: var(--cocoa);
+  border-bottom: 1px dashed var(--line-soft);
+}
+
+.report-line .rl-name { flex: 1; }
+.report-line .rl-meta { opacity: 0.55; font-size: 12px; margin-left: 8px; }
+.report-line .rl-amount { font-weight: 600; flex-shrink: 0; margin-left: 12px; }
+
+.report-empty-line {
+  font-size: 13px;
+  color: var(--cocoa);
+  opacity: 0.5;
+  padding: 6px 0;
+  font-style: italic;
+}
+
+.report-totals-row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--forest);
+}
+
+.report-net-box {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-net-box .net-label { font-size: 13.5px; color: var(--cocoa); }
+.report-net-box .net-amount { font-family: 'Fraunces', serif; font-size: 24px; }
+.report-net-box .net-amount.positive { color: var(--forest); }
+.report-net-box .net-amount.negative { color: var(--error); }
+
+.report-forecast-note {
+  font-size: 12px;
+  color: var(--cocoa);
+  opacity: 0.6;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.report-modal-footer {
+  padding: 16px 26px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  gap: 10px;
+}
+
+.report-modal-footer .btn { flex: 1; }
+
+.report-print-header {
+  display: none;
+}
+
+/* ─── PRINT STYLES: this is the actual "print report" functionality ─── */
+@media print {
+  body * { visibility: hidden; }
+  .report-body, .report-body * { visibility: visible; }
+  .report-print-header, .report-print-header * { visibility: visible; }
+
+  .report-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .report-print-header {
+    display: block !important;
+    margin-bottom: 20px;
+  }
+
+  .report-print-header h2 { font-size: 20px; color: var(--forest); }
+  .report-print-header p { font-size: 12px; color: var(--cocoa); opacity: 0.7; }
+
+  .no-print, .modal-overlay > .report-modal > .report-modal-header,
+  .modal-overlay > .report-modal > .report-range-picker,
+  .modal-overlay > .report-modal > .report-modal-footer,
+  .modal-close {
+    display: none !important;
+  }
+}
